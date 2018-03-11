@@ -129,7 +129,7 @@ app.post('/addTest', (req, res) => {
     const pubKey = req.body.pubKey;
     const priKey = req.body.priKey;
 
-    const currDate = new Date.toString();
+    const currDate = new Date().toString();
     const txMetaData = _.pick(req.body, ['latitude','longitude', 'diseaseName', 'diseaseID']);
 
     txMetaData['datetime'] = currDate;
