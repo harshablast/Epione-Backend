@@ -35,7 +35,9 @@ app.post('/register', (req, res) => {
             user.save().then(() => {
                 res.json({
                     status: 1,
-                    message: "User Successfully registered"
+                    message: "User Successfully registered",
+                    privateKey: keyPair.privateKey,
+                    publicKey: keyPair.publicKey
                 });
             }, (e) => {
                 console.log(e);
@@ -69,14 +71,14 @@ app.post('/login', (req, res) => {
         res.json(errJson);
     });
 
-    },(err) => {
+    }, (err) => {
         console.log(err);
 });
 
 
 
 ws.on('open', () => {
-    console.log("CONNECTED")
+    console.log("CONNECTED");
 });
 ws.on('connection', function connection(ws) {
     ws.on('message', (data) => {
@@ -115,40 +117,3 @@ ws.on('connection', function connection(ws) {
 app.listen(port, () => {
     console.log(`Server is up on port: ${port}`);
 });
-
-
-
-/*
-data format:
-{
-type: 0,
-values: {
-speed:
-steps:
-heart rate:
-},
-information: {
-date:
-
-}
-}
-
-{
-type: 1,
-values: {
-doctor:
-diagnosis codes : {}
-symptom codes: {}
-medication codes: {}
-}
-}
-
-{
-type: 0,
-values: {
-speed:
-steps:
-heart rate:
-}
-}
- */

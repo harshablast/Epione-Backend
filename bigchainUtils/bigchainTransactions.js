@@ -2,32 +2,18 @@ const {conn} = require('./bigchainConnect');
 const BigchainDB = require('bigchaindb-driver');
 const axios = require('axios');
 
-function createTransactionObject(object, metaData, key) {
+function createTransactionObject(object, metaData, pubKey, priKey) {
     const txCreateObject = BigchainDB.Transaction.makeCreateTransaction(
-        // Asset field
         {object},
-        // Metadata field, contains information about the transaction itself
-        // (can be `null` if not needed)
         {metaData},
-        // Output. For this case we create a simple Ed25519 condition
-        [BigchainDB.Transaction.makeOutput(BigchainDB.Transaction.makeEd25519Condition(key))],
-        // Issuers
-        key
+        [BigchainDB.Transaction.makeOutput(BigchainDB.Transaction.makeEd25519Condition(pubKey))],
+        pubKey
     );
 
-    console.log(txCreateObject);
-    // The owner of the painting signs the transaction
-    const txSigned = BigchainDB.Transaction.signTransaction(txCreateObject, alice.privateKey);
-    console.log(txSigned);
-    // Send the transaction off to BigchainDB
+    const txSigned = BigchainDB.Transaction.signTransaction(txCreateObject, priKey);
     conn.postTransaction(txSigned)
-    // Check the status of the transaction
-        .then(() => conn.pollStatusAndFetchTransaction(txSigned.id))
-        .then(res => {
-            document.body.innerHTML += '<h3>Transaction created</h3>';
-            document.body.innerHTML += txSigned.id
-            // txSigned.id corresponds to the asset id of the painting
-        })
+        .then(() => conn.pollStatusAndFetchTransaction(txSigned.id), (err) => console.log(err))
+        .then(retrievedTx => console.log('Transaction', retrievedTx.id, 'successfully posted.'), err => console.log(err))
 }
 
 function transferOwnership(txCreatedID, newOwner) {
