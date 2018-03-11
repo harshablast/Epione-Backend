@@ -81,7 +81,7 @@ app.post('/push2chain', (req,res) => {
     const pubKey = req.body.pubKey;
     const priKey = req.body.priKey;
 
-    const txAsset = {};
+    const txAsset = {"name":"Hemant"};
     const txMetaData = _.pick(req.body, ['latitude', 'longitude', 'heightTag', 'bodyMassTag', 'bodyMassIndexTag', 'stepCountTag', 'distanceWalkingRunningTag', 'activeEnergyBurnedTag', 'flightClimbedTag']);
 
     console.log(txMetaData);
