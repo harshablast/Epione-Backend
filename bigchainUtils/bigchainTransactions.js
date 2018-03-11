@@ -13,7 +13,7 @@ function createTransactionObject(object, metaData, pubKey, priKey) {
     const txSigned = BigchainDB.Transaction.signTransaction(txCreateObject, priKey);
     conn.postTransaction(txSigned)
         .then(() => conn.pollStatusAndFetchTransaction(txSigned.id), (err) => console.log(err))
-        .then(retrievedTx => console.log('Transaction', retrievedTx.id, 'successfully posted.'), err => console.log(err))
+        .then((retrievedTx) => console.log('Transaction', retrievedTx.id, 'successfully posted.'), (err) => console.log(err))
 }
 
 function transferOwnership(txCreatedID, newOwner) {
