@@ -58,17 +58,42 @@ function transferOwnership(txCreatedID, newOwner) {
         })
 }
 
-function getTxInfo(assetID) {
-    return axios.get('http://139.59.12.96:59984/api/v1/transactions/' + assetID);
+function getTxInfo(txID) {
+    return axios.get('http://139.59.12.96:59984/api/v1/transactions/' + txID);
 }
 
 function userTransactions(publicKey) {
+    console.log(publicKey);
     return axios.get('http://139.59.12.96:59984/api/v1/outputs?public_key=' + publicKey);
 }
 
+function getMetadata(publicKey, callback){
+    var jsonData = [];
+    userTransactions(publicKey).then((data) => {
+        for(var i=0;i<data.data.length;i++)
+        {
+            //console.log(data.data.length);
+            getTxInfo(data.data[i].transaction_id).then((txData) => {
+                //console.log(txData.data.metadata);
+                jsonData.push(txData.data.metadata);
+                if(jsonData.length==data.data.length) {
+                    console.log(1);
+                    callback({"metadata": jsonData});
+                }
+            },(err) => {
+            console.log(2);
+            callback({"error": err});
+            });
+        }
+    },(err) => {
+    console.log(3);
+        callback({"error":err});
+    });
+}
 module.exports = {
     createTransactionObject,
     transferOwnership,
     getTxInfo,
-    userTransactions
+    userTransactions,
+    getMetadata
 };

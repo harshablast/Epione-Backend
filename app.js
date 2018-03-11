@@ -3,7 +3,7 @@ var bodyParser  = require('body-parser');
 var bip39 = require('bip39');
 const BigchainDB = require('bigchaindb-driver');
 
-const {createTransactionObject, transferOwnership, getTxInfo, userTransactions} = require('./bigchainUtils/bigchainTransactions');
+const {createTransactionObject, transferOwnership, getTxInfo, userTransactions,getMetadata} = require('./bigchainUtils/bigchainTransactions');
 const {ws} = require('./webSocket/webSocketConnect');
 var {mongoose} = require('./db/mongoose');
 var {User} = require('./db/userModel');
@@ -98,6 +98,20 @@ app.post('/push2chain', (req,res) => {
     });
 });
 
+app.post('/getfromchain', (req,res) => {
+    pubKey = req.body.pubKey;
+
+    getMetadata(pubKey, (data) => {
+        console.log(data);
+        res.json(data);
+    });
+    //userTransactions(pubKey).then((data) => {
+    //    res.json(data.data);
+    //},(err) => {
+    //console.log(err);
+    //});
+
+});
 
 
 ws.on('open', () => {
