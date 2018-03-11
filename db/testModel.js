@@ -8,11 +8,11 @@ const bcrypt = require('bcryptjs');
 
 var testSchema = new mongoose.Schema({
     patientID: {
-        type: _id,
+        type: String,
         required: true
     },
     doctorID: {
-        type: _id,
+        type: String,
         required: true
     },
     testCode: {
