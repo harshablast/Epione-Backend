@@ -133,7 +133,7 @@ app.post('/addTest', (req, res) => {
     const txMetaData = _.pick(req.body, ['latitude','longitude', 'diseaseName', 'diseaseID']);
 
     txMetaData['datetime'] = currDate;
-    const txAsset = {name : "Harsha"};
+    const txAsset = {name : "Harsha.B"};
 
     createTransactionObject(txAsset, txMetaData, pubKey, priKey, (err, txID) => {
         if(err){
