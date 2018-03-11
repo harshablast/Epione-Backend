@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser  = require('body-parser');
 var bip39 = require('bip39');
+const _ = require('lodash');
 const BigchainDB = require('bigchaindb-driver');
 
 const {createTransactionObject, transferOwnership, getTxInfo, userTransactions,getMetadata} = require('./bigchainUtils/bigchainTransactions');
