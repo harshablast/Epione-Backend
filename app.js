@@ -7,6 +7,7 @@ const {createTransactionObject, transferOwnership, getTxInfo, userTransactions,g
 const {ws} = require('./webSocket/webSocketConnect');
 var {mongoose} = require('./db/mongoose');
 var {User} = require('./db/userModel');
+var {Test} = require('./db/testModel');
 
 const port = process.env.PORT || 3000;
 
@@ -76,11 +77,11 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/push2chain', (req,res) => {
-    pubKey = req.body.pubKey;
-    priKey = req.body.priKey;
+    const pubKey = req.body.pubKey;
+    const priKey = req.body.priKey;
 
-    txAsset = req.body.txAsset;
-    txMetaData = req.body.txMetaData;
+    const txAsset = req.body.txAsset;
+    const txMetaData = req.body.txMetaData;
 
     console.log({
         pubKey,
@@ -106,7 +107,7 @@ app.post('/push2chain', (req,res) => {
 });
 
 app.post('/getfromchain', (req,res) => {
-    pubKey = req.body.pubKey;
+    const pubKey = req.body.pubKey;
 
     getMetadata(pubKey, (data) => {
         console.log(data);
@@ -117,6 +118,27 @@ app.post('/getfromchain', (req,res) => {
     //},(err) => {
     //console.log(err);
     //});
+
+});
+
+app.post('/diagnosis', (req, res) => {
+    const _id = req.body._id;
+    const diagnosticCodes = req.body.diagnosticCodes;
+
+    Test.findOneAndUpdate({_id},{$set:{testStatus: true},$set:{diagnosticCodes}}).exec(function(err, data){
+        if(err){
+            console.log(err);
+            res.status(500).json({
+                status: 0,
+                message: err
+            });
+        } else {
+            res.status(200).json({
+                status: 1,
+                message: "Diagnosis successfully updated"
+            });
+        }
+    });
 
 });
 
@@ -158,13 +180,7 @@ ws.on('connection', function connection(ws) {
     });
 });
 
-app.post('/diagnosis', (req, res) {
-   doctorID = req.body.doctorID;
-   testID = req.body.testID;
-   diagnosis = req.body.diagnosis;
 
-
-});
 
 
 
