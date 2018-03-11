@@ -5,7 +5,7 @@ const axios = require('axios');
 function createTransactionObject(object, metaData, pubKey, priKey, callback) {
     const txCreateObject = BigchainDB.Transaction.makeCreateTransaction(
         {object},
-        {metaData},
+        metaData,
         [BigchainDB.Transaction.makeOutput(BigchainDB.Transaction.makeEd25519Condition(pubKey))],
         pubKey
     );
