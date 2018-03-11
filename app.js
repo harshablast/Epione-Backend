@@ -80,15 +80,8 @@ app.post('/push2chain', (req,res) => {
     const pubKey = req.body.pubKey;
     const priKey = req.body.priKey;
 
-    const txAsset = req.body.txAsset;
-    const txMetaData = req.body.txMetaData;
-
-    console.log({
-        pubKey,
-        priKey,
-        txAsset,
-        txMetaData
-    });
+    const txAsset = {};
+    const txMetaData = _.pick(req.body, ['latitude', 'longitude', 'heightTag', 'bodyMassTag', 'bodyMassIndexTag', 'stepCountTag', 'distanceWalkingRunningTag', 'activeEnergyBurnedTag', 'flightClimbedTag']);
 
     createTransactionObject(txAsset, txMetaData, pubKey, priKey, (err, txID) => {
         if(err){
@@ -156,7 +149,11 @@ app.post('/diagnosis', (req, res) => {
                 message: "Diagnosis successfully updated"
             });
         }
+
+
     });
+
+
 
 });
 
