@@ -82,8 +82,17 @@ app.post('/push2chain', (req,res) => {
     const priKey = req.body.priKey;
 
     const txAsset = {"name":"Hemant"};
-    const txMetaData = _.pick(req.body, ['latitude', 'longitude', 'heightTag', 'bodyMassTag', 'bodyMassIndexTag', 'stepCountTag', 'distanceWalkingRunningTag', 'activeEnergyBurnedTag', 'flightClimbedTag']);
-
+    const txMetaData = {
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        heightTag: req.body.heightTag,
+        bodyMassTag: req.body.bodyMassTag,
+        bodyMassIndexTag: req.body.bodyMassIndexTag,
+        stepCountTag: req.body.stepCountTag,
+        distanceWalkingRunningTag: req.body.distanceWalkingRunningTag,
+        activeEnergyBurnedTag: req.body.activeEnergyBurnedTag,
+        flightClimbedTag: req.body.flightClimbedTag
+    };
     console.log(txMetaData);
     createTransactionObject(txAsset, txMetaData, pubKey, priKey, (err, txID) => {
         if(err){
