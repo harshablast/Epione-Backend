@@ -7,6 +7,7 @@ const {createTransactionObject, transferOwnership, getTxInfo, userTransactions,g
 const {ws} = require('./webSocket/webSocketConnect');
 var {mongoose} = require('./db/mongoose');
 var {User} = require('./db/userModel');
+var {Test} = require('./db/testModel');
 
 const port = process.env.PORT || 3000;
 
@@ -158,13 +159,6 @@ ws.on('connection', function connection(ws) {
     });
 });
 
-app.post('/diagnosis', (req, res) {
-   doctorID = req.body.doctorID;
-   testID = req.body.testID;
-   diagnosis = req.body.diagnosis;
-
-
-});
 
 
 
