@@ -75,6 +75,29 @@ app.post('/login', (req, res) => {
         console.log(err);
 });
 
+app.post('/push2chain', (req,res) => {
+    pubKey = req.body.pubKey;
+    priKey = req.body.priKey;
+
+    txAsset = req.body.txAsset;
+    txMetaData = req.body.txMetaData;
+
+    createTransactionObject(txAsset, txMetaData, pubKey, priKey, (err, txID) => {
+        if(err){
+            console.log(err);
+            res.json({
+                status: 0,
+                message: err
+            })
+        } else {
+            res.json({
+                status: 1,
+                message: "Transaction" + txID + "has been updated in BlockChain database succesfully"
+            })
+        }
+    });
+});
+
 
 
 ws.on('open', () => {

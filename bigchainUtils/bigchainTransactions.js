@@ -2,7 +2,7 @@ const {conn} = require('./bigchainConnect');
 const BigchainDB = require('bigchaindb-driver');
 const axios = require('axios');
 
-function createTransactionObject(object, metaData, pubKey, priKey) {
+function createTransactionObject(object, metaData, pubKey, priKey, callback) {
     const txCreateObject = BigchainDB.Transaction.makeCreateTransaction(
         {object},
         {metaData},
@@ -13,7 +13,13 @@ function createTransactionObject(object, metaData, pubKey, priKey) {
     const txSigned = BigchainDB.Transaction.signTransaction(txCreateObject, priKey);
     conn.postTransaction(txSigned)
         .then(() => conn.pollStatusAndFetchTransaction(txSigned.id), (err) => console.log(err))
-        .then((retrievedTx) => console.log('Transaction', retrievedTx.id, 'successfully posted.'), (err) => console.log(err))
+        .then((retrievedTx) => {
+                console.log('Transaction', retrievedTx.id, 'successfully posted.')
+                callback(null,retrievedTx.id);
+        },(err) => {
+                console.log(err);
+                callback(err, null);
+        })
 }
 
 function transferOwnership(txCreatedID, newOwner) {
