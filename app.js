@@ -77,19 +77,13 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/push2chain', (req,res) => {
-    pubKey = req.body.pubKey;
-    priKey = req.body.priKey;
+    const pubKey = req.body.pubKey;
+    const priKey = req.body.priKey;
 
-    txAsset = req.body.txAsset;
-    txMetaData = req.body.txMetaData;
+    const txAsset = {};
+    const txMetaData = _.pick(req.body, ['latitude', 'longitude', 'heightTag', 'bodyMassTag', 'bodyMassIndexTag', 'stepCountTag', 'distanceWalkingRunningTag', 'activeEnergyBurnedTag', 'flightClimbedTag']);
 
-    console.log({
-        pubKey,
-        priKey,
-        txAsset,
-        txMetaData
-    });
-
+    console.log(txMetaData);
     createTransactionObject(txAsset, txMetaData, pubKey, priKey, (err, txID) => {
         if(err){
             console.log(err);
@@ -107,7 +101,7 @@ app.post('/push2chain', (req,res) => {
 });
 
 app.post('/getfromchain', (req,res) => {
-    pubKey = req.body.pubKey;
+    const pubKey = req.body.pubKey;
 
     getMetadata(pubKey, (data) => {
         console.log(data);
@@ -118,6 +112,49 @@ app.post('/getfromchain', (req,res) => {
     //},(err) => {
     //console.log(err);
     //});
+
+});
+
+app.post('/addTest', (req, res) => {
+    const testBody = _.pick(req.body, ['patientID','doctorID', 'testCode', 'scheduledDate']);
+    const test = new Test(testBody);
+
+    test.save().then(() => {
+        res.json({
+            status: 1,
+            message: "Test successfully submitted"
+        });
+    }).then((err) => {
+        res.json({
+            status: 0,
+            message: err.message
+        })
+    })
+
+});
+
+app.post('/diagnosis', (req, res) => {
+    const _id = req.body._id;
+    const diagnosticCodes = req.body.diagnosticCodes;
+
+    Test.findOneAndUpdate({_id},{$set:{testStatus: true},$set:{diagnosticCodes}}).exec(function(err, data){
+        if(err){
+            console.log(err);
+            res.status(500).json({
+                status: 0,
+                message: err
+            });
+        } else {
+            res.status(200).json({
+                status: 1,
+                message: "Diagnosis successfully updated"
+            });
+        }
+
+
+    });
+
+
 
 });
 
@@ -158,9 +195,6 @@ ws.on('connection', function connection(ws) {
         }
     });
 });
-
-
-
 
 app.listen(port, () => {
     console.log(`Server is up on port: ${port}`);

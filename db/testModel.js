@@ -7,9 +7,13 @@ const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 
 var testSchema = new mongoose.Schema({
+    patientID: {
+        type: _id,
+        required: true
+    },
     doctorID: {
-        type:String,
-        default:null
+        type: _id,
+        required: true
     },
     testCode: {
         type:String,
@@ -33,5 +37,7 @@ var testSchema = new mongoose.Schema({
 });
 
 var Test = mongoose.model('Test', testSchema);
+
+
 
 module.exports = {Test};
