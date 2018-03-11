@@ -82,6 +82,13 @@ app.post('/push2chain', (req,res) => {
     txAsset = req.body.txAsset;
     txMetaData = req.body.txMetaData;
 
+    console.log({
+        pubKey,
+        priKey,
+        txAsset,
+        txMetaData
+    });
+
     createTransactionObject(txAsset, txMetaData, pubKey, priKey, (err, txID) => {
         if(err){
             console.log(err);
@@ -136,6 +143,16 @@ ws.on('connection', function connection(ws) {
         }
     });
 });
+
+app.post('/diagnosis', (req, res) {
+   doctorID = req.body.doctorID;
+   testID = req.body.testID;
+   diagnosis = req.body.diagnosis;
+
+
+});
+
+
 
 app.listen(port, () => {
     console.log(`Server is up on port: ${port}`);
