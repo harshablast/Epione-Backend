@@ -75,6 +75,16 @@ app.post('/login', (req, res) => {
         console.log(err);
 });
 
+app.post('/push2chain', (req,res) => {
+    pubKey = req.body.pubKey;
+    priKey = req.body.priKey;
+
+    txAsset = req.body.txAsset;
+    txMetaData = req.body.txMetaData;
+
+    createTransactionObject()
+})
+
 
 
 ws.on('open', () => {
