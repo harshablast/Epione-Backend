@@ -126,20 +126,27 @@ app.post('/getfromchain', (req,res) => {
 });
 
 app.post('/addTest', (req, res) => {
-    const testBody = _.pick(req.body, ['patientID','doctorID', 'testCode', 'scheduledDate']);
-    const test = new Test(testBody);
+    const pubKey = req.body.pubKey;
+    const priKey = req.body.priKey;
 
-    test.save().then(() => {
-        res.json({
-            status: 1,
-            message: "Test successfully submitted"
-        });
-    }).then((err) => {
-        res.json({
-            status: 0,
-            message: err.message
-        })
-    })
+    const txMetaData = _.pick(req.body, ['latitude','longitude', 'diseaseName', 'diseaseID']);
+    const txAsset = {name : "Harsha"};
+
+    createTransactionObject(txAsset, txMetaData, pubKey, priKey, (err, txID) => {
+        if(err){
+            console.log(err);
+            res.json({
+                status: 0,
+                message: err
+            })
+        } else {
+            res.json({
+                status: 1,
+                message: "Transaction" + txID + "has been updated in BlockChain database succesfully"
+            })
+        }
+    });
+
 
 });
 
@@ -160,12 +167,7 @@ app.post('/diagnosis', (req, res) => {
                 message: "Diagnosis successfully updated"
             });
         }
-
-
     });
-
-
-
 });
 
 
