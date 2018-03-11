@@ -82,8 +82,21 @@ app.post('/push2chain', (req,res) => {
     txAsset = req.body.txAsset;
     txMetaData = req.body.txMetaData;
 
-    createTransactionObject()
-})
+    createTransactionObject(txAsset, txMetaData, pubKey, priKey, (err, txID) => {
+        if(err){
+            console.log(err);
+            res.json({
+                status: 0,
+                message: err
+            })
+        } else {
+            res.json({
+                status: 1,
+                message: "Transaction" + txID + "has been updated in BlockChain database succesfully"
+            })
+        }
+    });
+});
 
 
 
