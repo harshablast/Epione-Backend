@@ -121,6 +121,24 @@ app.post('/getfromchain', (req,res) => {
 
 });
 
+app.post('/addTest', (req, res) => {
+    const testBody = _.pick(req.body, ['patientID','doctorID', 'testCode', 'scheduledDate']);
+    const test = new Test(testBody);
+
+    test.save().then(() => {
+        res.json({
+            status: 1,
+            message: "Test successfully submitted"
+        });
+    }).then((err) => {
+        res.json({
+            status: 0,
+            message: err.message
+        })
+    })
+
+});
+
 app.post('/diagnosis', (req, res) => {
     const _id = req.body._id;
     const diagnosticCodes = req.body.diagnosticCodes;
@@ -179,10 +197,6 @@ ws.on('connection', function connection(ws) {
         }
     });
 });
-
-
-
-
 
 app.listen(port, () => {
     console.log(`Server is up on port: ${port}`);
